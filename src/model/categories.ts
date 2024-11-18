@@ -2,11 +2,11 @@ import { ref } from "vue";
 
 export const cat = ref([
     {
-        name: 'all',
+        name: 'Kuli',
         active: true
     },
     {
-        name: 'Commedy',
+        name: 'Majaajilo',
         active: false
     }
 ])
