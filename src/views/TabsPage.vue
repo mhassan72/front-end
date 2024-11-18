@@ -115,8 +115,11 @@ onMounted(() => {
 }
 
 .avatar {
-  background: red;
+  background: rgba(15, 14, 14, 0.407);
+  background-image: url('https://ionicframework.com/docs/img/demos/avatar.svg');
   width: 40px;
   height: 40px;
+  border-radius: 50px;
+  background-size: cover;
 }
 </style>
