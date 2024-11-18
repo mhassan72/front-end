@@ -18,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     beforeEnter: auth_redirect
   },
   {
+    path: '/profile',
+    component: () => import('@/views/ProfilePage.vue'),
+    beforeEnter: authenticated
+  },
+  {
     path: '/title/:uid',
     component: () => import('@/views/TitlePage.vue'),
   },
@@ -56,8 +61,11 @@ const router = createRouter({
 
 
 function auth_redirect() {
-
   if(currentUser.value !== null ) router.push("/tabs")
+}
+
+function authenticated  () {
+  console.log("ProfilePage.vue")
 }
 
 export default router
