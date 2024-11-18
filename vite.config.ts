@@ -11,6 +11,15 @@ export default defineConfig({
     vue(),
     legacy()
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://bbebtvshdsr7yym6cxqtt6bwtm0eblee.lambda-url.eu-west-2.on.aws/',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
