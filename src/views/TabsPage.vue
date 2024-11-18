@@ -116,7 +116,7 @@ onMounted(() => {
 
 .avatar {
   background: rgba(15, 14, 14, 0.407);
-  background-image: url('https://ionicframework.com/docs/img/demos/avatar.svg');
+  background-image: url('https://titlemedia.s3.eu-west-2.amazonaws.com/Screenshot+2024-11-18+at+18.15.25.png');
   width: 40px;
   height: 40px;
   border-radius: 50px;
