@@ -15,6 +15,7 @@ import { ref, computed } from 'vue'
 import { currentUser } from '@/model/authState'
 import ContinueWatching from '@/components/browse/ContinueWatching.vue'
 import MovieListSlider from '@/components/browse/MovieListSlider.vue'
+
 const  data = ref([]);
 
 const  isAutehnticated  =  computed(() => {

@@ -52,7 +52,7 @@ function handleSearch() {
   search.loading = true
   const options = {
     method: 'GET',
-    url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
+    url: import.meta.env.VITE_SEARCH_API_URL,
     params: {search_term: `${search.term}`},
     headers: {
       'Content-Type': 'application/json', 
@@ -71,10 +71,9 @@ function handleSearch() {
     search.loading = false
     console.error(error);
   });
-
-
   
 }
+
 
 </script>
 

@@ -9,20 +9,23 @@
                 See All
             </div>
         </div>
+
+
         <ul class="list">
-            <li class="item" v-for="(item, index) in list" :key="index" @click="goTo(item.slug)">
-                <div class="coverImage" :style="{ backgroundImage: `url(${item.cover})` }"></div>
+            <li class="item" v-for="(item, index) in data.list" :key="index" @click="goTo(item.id)">
+                <div class="coverImage" :style="{ backgroundImage: `url(${item.poster})` }"></div>
                 <div class="context">
                    <small>{{ item.title }}</small>  <br>
-                    <small>{{ item.year }}</small>
+                    <small>{{ Number(item.year) }}</small>
                 </div>
             </li>
         </ul>
     </div>
 </template>
 <script  setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const props = defineProps<{
     title: string;
@@ -99,6 +102,33 @@ const list  =  ref([
         slug: 'm11'
     }
 ])
+
+const data : any = reactive({list:  []})
+
+function fetchByGenre (genre: string) {
+  const options = {
+      method: 'GET',
+      url: import.meta.env.VITE_SEARCH_API_URL,
+      params: {genres: genre},
+      headers: {
+          'Content-Type': 'application/json', 
+          action: 'title_by_genres'
+      }
+  };
+
+  axios.request(options).then(function (response) {
+    data.list = response.data.results
+  }).catch(function (error) {
+    data.list = []
+    console.error(error);
+  });
+}
+
+onMounted(() => {
+    fetchByGenre('Action')
+})
+
+
 
 function  goTo(path: string) {
     router.push({path:`/title/${path}`})
