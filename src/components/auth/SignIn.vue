@@ -73,7 +73,7 @@ function handleLogin () {
         headers: {
             'Content-Type': 'application/json', 
             'action': 'login',
-            'x-api-key': import.meta.env.VITE_API_KEY
+            'x-api-key': import.meta.env.VITE_AUTH_API_KEY
         },
         data: {phone: user.value.phone, password: user.value.password }
     };
