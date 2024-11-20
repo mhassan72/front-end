@@ -12,7 +12,7 @@
                 </ion-avatar>
 
                 <ion-label>
-                    {{ item.title }}({{ item.year }})
+                    {{ item.title }}({{ item.runtime[0] }})
                 </ion-label>
             </ion-item>
         </ion-list>
