@@ -13,6 +13,8 @@
 
                 <ion-label>
                     {{ item.title }}({{ item.runtime[0] }})
+                    <hr>
+                    <p>{{ item.plot }}</p>
                 </ion-label>
             </ion-item>
         </ion-list>
