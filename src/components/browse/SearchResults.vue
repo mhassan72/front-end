@@ -12,7 +12,7 @@
                 </ion-avatar>
 
                 <ion-label>
-                    {{ item?.title }}
+                    {{ item.title }}({{ item.year }})
                 </ion-label>
             </ion-item>
         </ion-list>
@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
 import { search } from '@/model/search';
-import { IonItem, IonSpinner, IonLabel, IonAvatar } from '@ionic/vue';
+import { IonItem, IonSpinner, IonLabel, IonAvatar, IonList } from '@ionic/vue';
 </script>
 <style scoped>
 

@@ -49,11 +49,11 @@ import axios from 'axios';
 import { search } from '@/model/search';
 
 function handleSearch() {
-  search.value.loading = true
+  search.loading = true
   const options = {
     method: 'GET',
     url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
-    params: {search_term: `${search.value.term}`},
+    params: {search_term: `${search.term}`},
     headers: {
       'Content-Type': 'application/json', 
       action: 'search_titles'
@@ -61,14 +61,14 @@ function handleSearch() {
   };
 
   axios.request(options).then(function (response) {
-    search.value.browse =  false
-    search.value.loading = false
-    search.value.search = true
-    search.value.results = response.data['results']
+    search.browse =  false
+    search.loading = false
+    search.search = true
+    search.results = response.data['results']
   }).catch(function (error) {
-    search.value.browse =  true
-    search.value.search = false
-    search.value.loading = false
+    search.browse =  true
+    search.search = false
+    search.loading = false
     console.error(error);
   });
 
