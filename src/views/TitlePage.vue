@@ -109,13 +109,13 @@
 <script setup lang="ts">
 import  {IonPage, IonContent, IonChip, IonButton } from '@ionic/vue';
 import { ref, onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import axios from "axios";
 
 
 const router = useRouter()
+const route = useRoute()
 const isDarkMode = ref(false);
-const crew =  ref([1,2,3,4,5,6])
 const episodes =  ref([
     {
         'title':'Soo Laabashada Jamaal',
@@ -155,7 +155,7 @@ function fetchTitle () {
     const options = {
         method: 'GET',
         url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
-        params: {id: '0848228'},
+        params: {id: route.params.uid },
         headers: {'Content-Type': 'application/json', action: 'find_title_by_id'}
     };
 
