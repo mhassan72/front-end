@@ -15,13 +15,9 @@
       </div>
 
       <div class="cats">
-        <span v-for="(item, index) in cat" :key="index">
-          <ion-chip color="tertiary" v-if="item.active">
-            {{ item.name }}
-          </ion-chip>
-
-          <ion-chip color="dark"  v-if="!item.active">
-            {{ item.name }}
+        <span v-for="(item, index) in limitedCategories" :key="index">
+          <ion-chip color="tertiary">
+            {{ item.so }}
           </ion-chip>
 
         </span>
@@ -44,9 +40,12 @@ import { IonPage, IonContent, IonChip } from '@ionic/vue';
 // import ExploreContainer from '@/components/ExploreContainer.vue';
 import BrowseContent from '@/components/browse/BrowseContent.vue';
 import SearchResults from '@/components/browse/SearchResults.vue';
-import  {  cat } from '@/model/categories'
+import  { genres } from '@/model/categories'
 import axios from 'axios';
 import { search } from '@/model/search';
+import { computed } from 'vue';
+
+const limitedCategories = computed(() => genres.value.slice(0, 5));
 
 function handleSearch() {
   search.loading = true
