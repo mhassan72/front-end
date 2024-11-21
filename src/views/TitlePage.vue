@@ -1,6 +1,6 @@
  <template>
     <ion-page>
-        <ion-content>
+        <ion-content :key="title.data.id">
 
             <div class="backBtn"  :class="{ darkBg: isDarkMode, lightBg: !isDarkMode }"  @click="backWard()">
                 <svg width="33px" height="33px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,7 +8,7 @@
                 </svg>
             </div>
 
-            <div  class="title_cover" :style="{ backgroundImage: `url('https://i.ytimg.com/vi/co__IyTZuZQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBtQ9_YfsthYqYXAVuE-wmj-SN1Hw')` }">
+            <div  class="title_cover" :style="{ backgroundImage: `url(${title.data.poster})` }">
                 <div class="gradient"></div>
             </div>
 
