@@ -16,9 +16,11 @@
             <div class="context">
                 <div class="header" :class="{ darkHeader: isDarkMode, lightHeader: !isDarkMode }">
                     <div class="left">
-                        <h4 :class="{ darkText: isDarkMode, lightText: !isDarkMode }">Habboon</h4>
+                        <h4 :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
+                            {{  title.data.title }}
+                        </h4>
                         <p :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
-                            2024
+                            {{  Number(title.data.year) }}
                         </p>
                     </div>
                     <div class="right">
@@ -37,18 +39,24 @@
 
                 <div class="textPadding" :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
                     <p>
-                        Habboon waa gabadh yar oo jaamacada dhigata, kuna foogan waxbarashadeeda, 
-                        jecelna inay wax akhrido. Waa agoon waxaana korsaday lamaane is qaba 
-                        Ducaale iyo Amran oo ay weheliyaan caruurtooda...
+                        {{title.data.plot }}
                     </p>
                 </div>
 
                 <div class="categories">
                     Astaanta   
-                    <ion-chip color="tertiary">Romance</ion-chip>
-                    <ion-chip color="secondary">Comedy</ion-chip>
-                    <ion-chip color="danger">Drama</ion-chip>
+                    <ion-chip color="tertiary" v-for="(item, index) in title.data.genres" >
+                        {{ item }}
+                    </ion-chip>
                 </div>
+
+
+                <!-- <div class="cast">
+                    cast   
+                    <ion-chip color="dark" v-for="(item, index) in title.data.cast" >
+                        {{ item.name }}
+                    </ion-chip>
+                </div> -->
 
             </div>
 
@@ -60,7 +68,7 @@
                     </div>
                 </div>
                 <ul  class="crewList">
-                    <li class="item"  v-for="(item, index)  in  crew" :key="index"></li>
+                    <li class="item"  v-for="(item, index)  in  title.data.cast" :key="index"></li>
 
                 </ul>
             </div>
@@ -100,8 +108,10 @@
 </template>
 <script setup lang="ts">
 import  {IonPage, IonContent, IonChip, IonButton } from '@ionic/vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from "axios";
+
 
 const router = useRouter()
 const isDarkMode = ref(false);
@@ -138,6 +148,25 @@ const episodes =  ref([
         'duration':'20:73'
     }
 ])
+
+const title : any  = reactive({ data: {}})
+
+function fetchTitle () {
+    const options = {
+        method: 'GET',
+        url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
+        params: {id: '0848228'},
+        headers: {'Content-Type': 'application/json', action: 'find_title_by_id'}
+    };
+
+    axios.request(options).then(function (response) {
+        title.data  =  response.data.items[0]
+    }).catch(function (error) {
+        console.error(error);
+    });
+}
+
+fetchTitle ()
 
 function backWard()  {
     router.go(-1)
@@ -307,6 +336,11 @@ onMounted(() => {
 .context .categories {
     display: flex;
     align-items: center;
+    padding-left: 20px;
+    color: gray;
+}
+
+.context .cast {
     padding-left: 20px;
     color: gray;
 }

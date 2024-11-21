@@ -8,7 +8,7 @@
         <ion-list>
             <ion-item  v-for="(item, index) in search.results" :key="index">
                 <ion-avatar aria-hidden="true" slot="start">
-                    <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                    <img alt="" :src="item.poster" />
                 </ion-avatar>
 
                 <ion-label>
@@ -18,7 +18,6 @@
                 </ion-label>
             </ion-item>
         </ion-list>
-
 
 
     </div>

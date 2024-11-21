@@ -1,12 +1,9 @@
 <template>
 <div>
     <ContinueWatching  v-if="isAutehnticated"></ContinueWatching>
-    <MovieListSlider title="Trending #️⃣" discription="simple discription here"></MovieListSlider>
-    <MovieListSlider title="Majaajilo  😹" discription="simple discription here"></MovieListSlider>
-    <MovieListSlider title="Jaceel ❤️" discription="simple discription here"></MovieListSlider>
-    <MovieListSlider title="Dagaal 🥷" discription="simple discription here"></MovieListSlider>
-
-
+    <MovieListSlider genre="Action" title="Dagaal 🥷" discription=""></MovieListSlider>
+    <MovieListSlider genre="Adventure" title="Tacabur  😹" discription=""></MovieListSlider>
+    <MovieListSlider genre="Romance"  title="Jaceel ❤️" discription=""></MovieListSlider>
     <div class="footerGap"></div>
 </div>
 </template>

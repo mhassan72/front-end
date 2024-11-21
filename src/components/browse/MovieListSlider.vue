@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="data.list.length > 0">
         <div class="header">
             <div class="left">
-                <strong>{{  title }}</strong> <br>
+                <strong>{{ title }}</strong> <br>
                 <small>{{ discription  }}</small>
             </div>
             <div class="right">
@@ -30,6 +30,7 @@ import axios from 'axios'
 const props = defineProps<{
     title: string;
     discription: string;
+    genre?: string
 }>()
 
 const router =   useRouter()
@@ -125,7 +126,7 @@ function fetchByGenre (genre: string) {
 }
 
 onMounted(() => {
-    fetchByGenre('Action')
+    fetchByGenre(`${props.genre}`)
 })
 
 
