@@ -24,7 +24,7 @@
                         </p>
                     </div>
                     <div class="right">
-                        <ion-button color="dark" @click="redirect('/watch/content_uid')">
+                        <ion-button color="dark" @click="redirect(`/watch/${title.data.id}`)">
                             Daawo
                         </ion-button>
                         <div class="btnAdd" :class="{ darkBtn: isDarkMode, lightBtn: !isDarkMode }">
@@ -68,12 +68,16 @@
                     </div>
                 </div>
                 <ul  class="crewList">
-                    <li class="item"  v-for="(item, index)  in  title.data.cast" :key="index"></li>
-
+                    <li 
+                        class="item"  
+                        v-for="(item, index)  in  title.data.cast" 
+                        :key="index"
+                        :style="{'background-image':  `url(${item.image})`}"
+                    ></li>
                 </ul>
             </div>
 
-            <div class="theEpisodes">
+            <div class="theEpisodes"  v-if="title.data.type == 'Tv Show'">
                 <div class="header">
                     <h4  :class="{ darkText: isDarkMode, lightText: !isDarkMode }">Xalqada</h4>
                     <div class="all" :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
@@ -314,6 +318,7 @@ onMounted(() => {
     height: 60px;
     border-radius: 50px;
     cursor: pointer;
+    background-size: cover;
 }
 
 .theEpisodes {

@@ -7,7 +7,7 @@
               <ion-icon :icon="chevronBack" slot="start"></ion-icon>
             </div>
 
-            <h4 class="mainHeader">Haboon |  Soo Laabashada Jamaal</h4>
+            <h4 class="mainHeader">{{ title.data.title + "  ( " +Number(title.data.year) + "  )" }}</h4>
 
             <div class="" @click="closePlayer">
               <!-- <ion-icon :icon="close"></ion-icon> -->
@@ -81,10 +81,11 @@
   </template>
   
 <script setup lang="ts">
-  import { ref, onMounted, onBeforeUnmount } from 'vue';
-  import { useRouter } from 'vue-router';
+  import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+  import { useRoute, useRouter } from 'vue-router';
   import { onIonViewWillEnter, onIonViewWillLeave, IonContent, IonPage, IonIcon, IonSpinner, IonLabel } from '@ionic/vue';
   import { chevronBack } from 'ionicons/icons';
+  import axios from 'axios';
   
   const router = useRouter();
   const video : any = ref<HTMLVideoElement | null>(null);
@@ -95,6 +96,25 @@
   const videoProgress = ref(0); // Track the video playback progress
   const loadedProgress = ref(0); // Track the loaded video progress
   const isLoading = ref(false);
+
+  const route = useRoute()
+  const title : any  = reactive({ data: {}})
+    
+
+  function fetchTitle () {
+    const options = {
+        method: 'GET',
+        url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
+        params: {id: route.params.content_uid },
+        headers: {'Content-Type': 'application/json', action: 'find_title_by_id'}
+    };
+
+    axios.request(options).then(function (response) {
+        title.data  =  response.data.items[0]
+    }).catch(function (error) {
+        console.error(error);
+    });
+}
   
   let controlsTimeout: any;
   
@@ -195,6 +215,7 @@
   // Lifecycle hooks
   onIonViewWillEnter(() => {
       lockLandscapeOrientation();
+      fetchTitle()
   });
   
   onIonViewWillLeave(() => {

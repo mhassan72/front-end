@@ -25,7 +25,7 @@ export interface SearchResult {
   
 
 export const search = reactive({
-    term: 'cep',
+    term: '',
     loading: false,
     browse: true,
     search: false,
