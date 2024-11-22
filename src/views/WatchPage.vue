@@ -9,7 +9,6 @@
 
             <h4 class="mainHeader">
                 {{ title.data.title + "  ( " +Number(title.data.year) + "  )" }}
-                {{sourceUrl}}
             </h4>
 
             <div class="" @click="closePlayer">
@@ -44,7 +43,7 @@
   
           <!-- Video player element with click to show controls -->
           <video ref="video" preload="meta" autoplay @timeupdate="updateTime" @click="showControls">
-            <source ref="source" type="video/mp4" />
+            <source :src="sourceUrl" ref="source" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
   
@@ -119,7 +118,9 @@
             title.data = response.data.items[0];
 
             if (title.data.video) {
-                fetchVideo(); // Fetch video only after title data is set
+                sourceUrl.value = response.data.items[0].video.source_url
+                video.value.load();
+
             } else {
                 console.error("Video URL is missing in the title data.");
             }
@@ -128,34 +129,6 @@
         }
     }
 
-    async function fetchVideo() {
-        console.log("Fetching Video")
-        try {
-            const videoUrl = title?.data?.video?.source_url;
-            if (!videoUrl) throw new Error("Video URL is not available.");
-
-            const response = await fetch(videoUrl);
-            if (!response.ok) throw new Error(`Failed to fetch video: ${response.statusText}`);
-            console.log("Converting the response URL into a Blob")
-            // Convert the response into a Blob and create an object URL
-            const blob = await response.blob();
-            sourceUrl.value = URL.createObjectURL(blob); // Set the Blob URL as the new source URL
-            console.log("Updating the source element dynamically")
-            // Update the source element dynamically
-            if (source.value) {
-                console.log("source found")
-                source.value.src = sourceUrl.value; // Update the source URL
-            }
-
-            // Reload the video element to apply the new source
-            if (video.value) {
-                console.log("Reloading the video")
-                video.value.load(); // Reload the video with the updated source
-            }
-        } catch (error) {
-            console.error("Error fetching video:", error);
-        }
-    }
   
   let controlsTimeout: any;
   
