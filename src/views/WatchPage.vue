@@ -7,7 +7,10 @@
               <ion-icon :icon="chevronBack" slot="start"></ion-icon>
             </div>
 
-            <h4 class="mainHeader">{{ title.data.title + "  ( " +Number(title.data.year) + "  )" }}</h4>
+            <h4 class="mainHeader">
+                {{ title.data.title + "  ( " +Number(title.data.year) + "  )" }}
+                {{sourceUrl}}
+            </h4>
 
             <div class="" @click="closePlayer">
               <!-- <ion-icon :icon="close"></ion-icon> -->
@@ -41,7 +44,7 @@
   
           <!-- Video player element with click to show controls -->
           <video ref="video" preload="meta" autoplay @timeupdate="updateTime" @click="showControls">
-            <source src="https://titlemedia.s3.eu-west-2.amazonaws.com/sample_movie.mp4" type="video/mp4">
+            <source ref="source" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
   
@@ -81,7 +84,7 @@
   </template>
   
 <script setup lang="ts">
-  import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+  import { ref, computed, reactive, onMounted, onBeforeUnmount } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { onIonViewWillEnter, onIonViewWillLeave, IonContent, IonPage, IonIcon, IonSpinner, IonLabel } from '@ionic/vue';
   import { chevronBack } from 'ionicons/icons';
@@ -89,6 +92,7 @@
   
   const router = useRouter();
   const video : any = ref<HTMLVideoElement | null>(null);
+  const source = ref<HTMLSourceElement | null>(null); // Ref for source element
   const isPlaying = ref(false);
   const isControlsVisible = ref(false);
   const currentTime = ref('0:00');
@@ -99,22 +103,59 @@
 
   const route = useRoute()
   const title : any  = reactive({ data: {}})
-    
 
-  function fetchTitle () {
-    const options = {
-        method: 'GET',
-        url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
-        params: {id: route.params.content_uid },
-        headers: {'Content-Type': 'application/json', action: 'find_title_by_id'}
-    };
+  const sourceUrl = ref("");
 
-    axios.request(options).then(function (response) {
-        title.data  =  response.data.items[0]
-    }).catch(function (error) {
-        console.error(error);
-    });
-}
+  async  function fetchTitle() {
+        const options = {
+            method: 'GET',
+            url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
+            params: { id: route.params.content_uid },
+            headers: { 'Content-Type': 'application/json', action: 'find_title_by_id' },
+        };
+
+        try {
+            const response = await axios.request(options);
+            title.data = response.data.items[0];
+
+            if (title.data.video) {
+                fetchVideo(); // Fetch video only after title data is set
+            } else {
+                console.error("Video URL is missing in the title data.");
+            }
+        } catch (error) {
+            console.error("Error fetching title:", error);
+        }
+    }
+
+    async function fetchVideo() {
+        console.log("Fetching Video")
+        try {
+            const videoUrl = title?.data?.video?.source_url;
+            if (!videoUrl) throw new Error("Video URL is not available.");
+
+            const response = await fetch(videoUrl);
+            if (!response.ok) throw new Error(`Failed to fetch video: ${response.statusText}`);
+            console.log("Converting the response URL into a Blob")
+            // Convert the response into a Blob and create an object URL
+            const blob = await response.blob();
+            sourceUrl.value = URL.createObjectURL(blob); // Set the Blob URL as the new source URL
+            console.log("Updating the source element dynamically")
+            // Update the source element dynamically
+            if (source.value) {
+                console.log("source found")
+                source.value.src = sourceUrl.value; // Update the source URL
+            }
+
+            // Reload the video element to apply the new source
+            if (video.value) {
+                console.log("Reloading the video")
+                video.value.load(); // Reload the video with the updated source
+            }
+        } catch (error) {
+            console.error("Error fetching video:", error);
+        }
+    }
   
   let controlsTimeout: any;
   
@@ -213,7 +254,7 @@
   }
   
   // Lifecycle hooks
-  onIonViewWillEnter(() => {
+  onIonViewWillEnter(async() => {
       lockLandscapeOrientation();
       fetchTitle()
   });
@@ -227,6 +268,7 @@
   });
   
   onMounted(() => {
+    fetchTitle()
       if (video.value) {
         
           video.value.onloadedmetadata = () => {
@@ -243,6 +285,10 @@
             video.value.pause()
             video.value.removeEventListener('timeupdate', updateTime);
       }
+
+    if (sourceUrl.value) {
+        URL.revokeObjectURL(sourceUrl.value);
+    }
   });
 </script>
   
