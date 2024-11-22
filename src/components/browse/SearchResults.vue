@@ -6,7 +6,11 @@
          </div>
 
         <ion-list>
-            <ion-item  v-for="(item, index) in search.results" :key="index">
+            <ion-item  
+                    v-for="(item, index) in search.results" 
+                    :key="index"  
+                    :href="`/title/${item.id}`"
+                    >
                 <ion-avatar aria-hidden="true" slot="start">
                     <img alt="" :src="item.poster" />
                 </ion-avatar>
