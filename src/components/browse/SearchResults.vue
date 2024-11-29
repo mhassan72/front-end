@@ -6,17 +6,19 @@
          </div>
 
         <ion-list>
+
+            <!-- {{ search.results }} -->
             <ion-item  
                     v-for="(item, index) in search.results" 
                     :key="index"  
                     :href="`/title/${item.id}`"
                     >
                 <ion-avatar aria-hidden="true" slot="start">
-                    <img alt="" :src="item.poster" />
+                    <img alt="" :src="item.poster_path" />
                 </ion-avatar>
 
                 <ion-label>
-                    {{ item.title }}({{ item.runtime[0] }})
+                    <!-- {{ item.title }}({{ item.runtime[0] }}) -->
                     <hr>
                     <p>{{ item.plot }}</p>
                 </ion-label>

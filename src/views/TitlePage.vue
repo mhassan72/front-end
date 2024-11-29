@@ -1,6 +1,6 @@
  <template>
     <ion-page>
-        <ion-content :key="title.data.id">
+        <ion-content :key="title?.data?.items?.[0]?.id" v-if="title?.data?.items?.[0]">
 
             <div class="backBtn"  :class="{ darkBg: isDarkMode, lightBg: !isDarkMode }"  @click="backWard()">
                 <svg width="33px" height="33px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -8,7 +8,15 @@
                 </svg>
             </div>
 
-            <div  class="title_cover" :style="{ backgroundImage: `url(${title.data.poster})` }">
+            <div  class="title_cover" 
+            :style="{
+                backgroundImage: title.data.items[0]?.poster_path 
+                  ? `url(${title.data.items[0].poster_path})` 
+                  : title.data.items[0]?.backdrop_path 
+                  ? `url(${title.data.items[0].backdrop_path})` 
+                  : 'none'
+              }"    
+            >
                 <div class="gradient"></div>
             </div>
 
@@ -17,14 +25,14 @@
                 <div class="header" :class="{ darkHeader: isDarkMode, lightHeader: !isDarkMode }">
                     <div class="left">
                         <h4 :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
-                            {{  title.data.title }}
+                            {{  title.data.items[0].title }}
                         </h4>
                         <p :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
-                            {{  Number(title.data.year) }}
+                            {{  Number(title.data.items[0].year) }}
                         </p>
                     </div>
                     <div class="right">
-                        <ion-button color="dark" @click="redirect(`/watch/${title.data.id}`)">
+                        <ion-button color="dark" @click="redirect(`/watch/${title.data.items[0].id}`)">
                             Daawo
                         </ion-button>
                         <div class="btnAdd" :class="{ darkBtn: isDarkMode, lightBtn: !isDarkMode }">
@@ -39,13 +47,13 @@
 
                 <div class="textPadding" :class="{ darkText: isDarkMode, lightText: !isDarkMode }">
                     <p>
-                        {{title.data.plot }}
+                        {{title.data.items[0].plot }}
                     </p>
                 </div>
 
                 <div class="categories">
                     Astaanta   
-                    <ion-chip color="tertiary" v-for="(item, index) in title.data.genres" >
+                    <ion-chip color="tertiary" v-for="(item, index) in title.data.items[0].genres" >
                         {{ item }}
                     </ion-chip>
                 </div>
@@ -153,7 +161,7 @@ const episodes =  ref([
     }
 ])
 
-const title : any  = reactive({ data: {}})
+const title : any  = reactive({ data: { items: [] } })
 
 function fetchTitle () {
     const options = {
@@ -164,7 +172,7 @@ function fetchTitle () {
     };
 
     axios.request(options).then(function (response) {
-        title.data  =  response.data.items[0]
+        title.data  =  response.data
     }).catch(function (error) {
         console.error(error);
     });

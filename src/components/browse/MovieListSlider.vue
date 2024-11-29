@@ -1,4 +1,6 @@
 <template>
+<div>
+    <!-- {{  data  }} -->
     <div class="container" v-if="data.list.length > 0">
         <div class="header">
             <div class="left">
@@ -13,7 +15,7 @@
 
         <ul class="list">
             <li class="item" v-for="(item, index) in data.list" :key="index" @click="goTo(item.id)">
-                <div class="coverImage" :style="{ backgroundImage: `url(${item.poster})` }"></div>
+                <div class="coverImage" :style="{ backgroundImage: `url(${item.poster_path})` }"></div>
                 <div class="context">
                    <small>{{ item.title }}</small>  <br>
                     <small>{{ Number(item.year) }}</small>
@@ -21,9 +23,10 @@
             </li>
         </ul>
     </div>
+</div>
 </template>
 <script  setup lang="ts">
-import { ref, defineProps, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 

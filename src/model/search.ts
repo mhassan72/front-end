@@ -9,7 +9,7 @@ export interface CastMember {
 export interface SearchResult {
     title: string;              // Movie title
     id: string;                 // IMDb ID or other unique identifier
-    poster: string;             // Poster image URL
+    poster_path: string;             // Poster image URL
     year: string;               // Year of release
     cast: CastMember[];         // List of cast members
     country: string[];          // List of countries
