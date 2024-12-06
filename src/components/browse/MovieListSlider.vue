@@ -18,7 +18,6 @@
                 <div class="coverImage" :style="{ backgroundImage: `url(${item.poster_path})` }"></div>
                 <div class="context">
                    <small>{{ item.title }}</small>  <br>
-                    <small>{{ Number(item.year) }}</small>
                 </div>
             </li>
         </ul>
@@ -29,6 +28,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+
 
 const props = defineProps<{
     title: string;
@@ -170,7 +170,7 @@ function  goTo(path: string) {
     margin: 0;
     padding: 0;
     width: 100px;
-    height: 190px;
+    height: 199px;
     margin: 3px;
     margin-bottom: 10px;
 }

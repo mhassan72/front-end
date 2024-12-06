@@ -59,12 +59,17 @@
                 </div>
 
 
-                <!-- <div class="cast">
+                <!-- {{ castParsedArray }} -->
+                <!-- {{ crewParsedArray }} -->
+
+
+                <div class="cast">
                     cast   
-                    <ion-chip color="dark" v-for="(item, index) in title.data.cast" >
+                    <div v-for="(item, index) in crewParsedArray" >
                         {{ item.name }}
-                    </ion-chip>
-                </div> -->
+                        {{ item.role }}
+                    </div>
+                </div>
 
             </div>
 
@@ -78,9 +83,9 @@
                 <ul  class="crewList">
                     <li 
                         class="item"  
-                        v-for="(item, index)  in  title.data.cast" 
+                        v-for="(item, index)  in  castParsedArray" 
                         :key="index"
-                        :style="{'background-image':  `url(${item.image})`}"
+                        :style="{'background-image':  `url(${item.profile_path})`}"
                     ></li>
                 </ul>
             </div>
@@ -161,9 +166,43 @@ const episodes =  ref([
     }
 ])
 
+
 const title : any  = reactive({ data: { items: [] } })
 
-function fetchTitle () {
+
+// Parsed array of JSON objects
+const castParsedArray = ref<Array<{ titleId: number; name: string; role: string; profile_path: string }>>([]);
+const crewParsedArray = ref<Array<{ titleId: number; name: string; role: string; profile_path: string }>>([]);
+// Function to convert raw strings to JSON objects
+
+async function convertToJson(arrayVal: any, model: any) {
+  try {
+    model.value = arrayVal.map((item: any) => {
+      // Remove curly braces and split by comma
+      const properties = item.replace(/[{}]/g, '').split(', ');
+      // Construct the object by splitting key-value pairs
+      const obj: Record<string, string> = {};
+      properties.forEach((prop: any) => {
+        const [key, value] = prop.split('=');
+        obj[key] = value;
+      });
+
+      // Return the object with correct typing
+      return {
+        titleId: parseInt(obj.titleId, 10),
+        name: obj.name,
+        role: obj.role,
+        profile_path: obj.profile_path,
+      };
+    });
+
+    console.log('Converted JSON Objects:', castParsedArray.value);
+  } catch (error) {
+    console.error('Error converting to JSON objects:', error);
+  }
+}
+
+async function fetchTitle () {
     const options = {
         method: 'GET',
         url: 'https://1vfc2rfcll.execute-api.eu-west-2.amazonaws.com/production/titles_search',
@@ -171,14 +210,13 @@ function fetchTitle () {
         headers: {'Content-Type': 'application/json', action: 'find_title_by_id'}
     };
 
-    axios.request(options).then(function (response) {
+    await axios.request(options).then(function (response) {
         title.data  =  response.data
     }).catch(function (error) {
         console.error(error);
     });
 }
 
-fetchTitle ()
 
 function backWard()  {
     router.go(-1)
@@ -198,6 +236,11 @@ function detectScreenMode() {
 
 onMounted(() => {
     detectScreenMode();
+    fetchTitle().finally(() => {
+        convertToJson(title.data.items[0].crew, crewParsedArray )
+        convertToJson(title.data.items[0].cast, castParsedArray )
+    })
+    
 });
 </script>
 <style scoped>
@@ -318,12 +361,13 @@ onMounted(() => {
     list-style: none;
     padding-left: 10px;
     padding-bottom: 10px;
+    overflow: auto;
 }
 
 .theCrew .crewList .item {
     background: rgba(45, 45, 45, 0.549);
-    width: 60px;
-    height: 60px;
+    min-width: 60px;
+    min-height: 60px;
     border-radius: 50px;
     cursor: pointer;
     background-size: cover;
@@ -356,6 +400,8 @@ onMounted(() => {
 .context .cast {
     padding-left: 20px;
     color: gray;
+    display: flex;
+    overflow: auto;
 }
 
 .episodeList {
