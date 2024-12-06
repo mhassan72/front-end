@@ -16,7 +16,6 @@
     </MovieListSlider>
 
     <div class="footerGap"></div>
-    {{   genres  }}
 </div>
 </template>
 <script setup lang="ts">
