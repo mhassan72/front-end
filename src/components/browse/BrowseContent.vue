@@ -1,10 +1,6 @@
 <template>
 <div>
     <ContinueWatching  v-if="isAutehnticated"></ContinueWatching>
-    <!-- <MovieListSlider genre="Action" title="Dagaal 🥷" discription=""></MovieListSlider> -->
-    <!-- <MovieListSlider genre="Adventure" title="Tacabur  😹" discription=""></MovieListSlider>
-    <MovieListSlider genre="Romance"  title="Jaceel ❤️" discription=""></MovieListSlider>
-    <MovieListSlider genre="Drama"  title="Jaceel ❤️" discription=""></MovieListSlider> -->
 
     <MovieListSlider
         v-for="(item, index) in genres"
@@ -12,8 +8,7 @@
         :title="item.so" 
         discription=""
         :key="index"
-    >
-    </MovieListSlider>
+    ></MovieListSlider>
 
     <div class="footerGap"></div>
 </div>

@@ -63,16 +63,17 @@
                 <!-- {{ crewParsedArray }} -->
 
 
-                <div class="cast">
+                <!-- <div class="cast">
                     cast   
                     <div v-for="(item, index) in crewParsedArray" >
                         {{ item.name }}
                         {{ item.role }}
                     </div>
-                </div>
+                </div> -->
 
             </div>
 
+            
             <div class="theCrew">
                 <div class="header">
                     <h4 :class="{ darkText: isDarkMode, lightText: !isDarkMode }">Jilaay</h4>
@@ -81,14 +82,22 @@
                     </div>
                 </div>
                 <ul  class="crewList">
-                    <li 
-                        class="item"  
-                        v-for="(item, index)  in  castParsedArray" 
-                        :key="index"
-                        :style="{'background-image':  `url(${item.profile_path})`}"
-                    ></li>
+                    <li class="item"  v-for="(item, index)  in  castParsedArray" :key="index" >
+                        <div class="container" v-if="item.profile_path != 'https://image.tmdb.org/t/p/w500null'">
+                            <div class="thumb" 
+                                v-if="item.profile_path != 'https://image.tmdb.org/t/p/w500null'"
+                                :style="{  'backgroundImage': `url(${item.profile_path})`}"
+                            >
+                            </div>
+                            <div class="text">
+                                {{ item.role }}
+                            </div>
+                        </div>
+                        
+                    </li>
                 </ul>
             </div>
+
 
             <div class="theEpisodes"  v-if="title.data.type == 'Tv Show'">
                 <div class="header">
@@ -357,7 +366,7 @@ onMounted(() => {
 
 .theCrew .crewList {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     list-style: none;
     padding-left: 10px;
     padding-bottom: 10px;
@@ -365,16 +374,35 @@ onMounted(() => {
 }
 
 .theCrew .crewList .item {
-    background: rgba(45, 45, 45, 0.549);
-    min-width: 60px;
-    min-height: 60px;
-    border-radius: 50px;
     cursor: pointer;
-    background-size: cover;
 }
 
-.theEpisodes {
+.theCrew .crewList .item .container{
+    min-width: 80px;
+    width: 80px;
+    min-height: 60px;
+    border-radius: 5px;
 }
+
+.theCrew .crewList .item .thumb {
+    background: #0000001f;
+    width: 80px;
+    height: 90px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-position: center top;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.theCrew .crewList .item .text {
+    color: rgb(132, 132, 132);
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+
 .theEpisodes .header {
     padding-left: 20px;
     padding-right: 20px;
