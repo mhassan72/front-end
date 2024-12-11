@@ -369,6 +369,7 @@ onMounted(() => {
     gap: 6px;
     list-style: none;
     padding-left: 10px;
+    padding-right: 50px;
     padding-bottom: 10px;
     overflow: auto;
 }
